@@ -4,8 +4,6 @@ const router = express.Router();
 const db = require('../db');
 const ExpressError = require('../expressError');
 
-module.exports = router;
-
 router.get('/', async (req,res,next) => {
     try{
         const results = await db.query(`SELECT * FROM companies`)
