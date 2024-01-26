@@ -22,7 +22,7 @@ router.get('/:code', async (req,res,next) => {
         }
         const invoices = await db.query(`SELECT id, amt, paid, add_date, paid_date FROM invoices WHERE comp_code=$1`, [code])
         company.rows[0].invoices = invoices.rows
-        return res.json({company: company.rows})
+        return res.json({company: company.rows[0]})
     }catch(err){
         return next(err)
     }
@@ -36,7 +36,7 @@ router.post('/', async (req,res, next) =>{
         }
         const returnValue = await db.query(`INSERT INTO companies (code, name, description) VALUES ($1,$2,$3) RETURNING code, name, description`,
             [code, name, description]);
-        return res.json({company: returnValue.rows});
+        return res.json({company: returnValue.rows[0]});
     } catch(err){
         return next(err);
     }
@@ -50,7 +50,7 @@ router.put('/:code', async (req,res,next) => {
         if(results.rows.length === 0){
             throw new ExpressError(`Company code ${code} could not be found`, 404)
         }
-        return res.json({company: [results.rows]})
+        return res.json({company: results.rows[0]})
     }catch(err){
         return next(err)
     }
