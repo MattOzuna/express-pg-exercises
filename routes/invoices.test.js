@@ -42,3 +42,10 @@ describe('GET /invoices', ()=>{
         // expect(response.body).toEqual({invoices: testInvoice})
     })
 })
+
+describe('GET /invoices/:id', ()=>{
+    test('Gets a single invoice by id', async ()=>{
+        const response = await request(app).get(`/invoices/${testInvoice.id}`)
+        expect(response.statusCode).toBe(200)
+    })
+})

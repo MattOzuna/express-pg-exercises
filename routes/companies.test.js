@@ -43,7 +43,7 @@ describe('GET /companies', ()=>{
     })
 })
 
-describe('GET /company/:code', ()=>{
+describe('GET /companies/:code', ()=>{
     test('Gets a single company by code', async ()=>{
         const response = await request(app).get('/companies/test')
         expect(response.statusCode).toBe(200)
