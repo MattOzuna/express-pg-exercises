@@ -16,12 +16,13 @@ router.get('/', async (req,res,next) => {
 router.get('/:code', async (req,res,next) => {
     try{
         const {code} = req.params;
-        const results = await db.query(`SELECT * FROM companies WHERE code=$1`, [code])
-        debugger
-        if (results.rows.length === 0){
-            throw new expressError('Company code could not be found', 404)
-        } 
-        return res.json({company: results.rows})
+        const company = await db.query(`SELECT code, name, description FROM companies WHERE code=$1`,[code])
+        if (company.rows.length === 0){
+            throw new expressError(`Company code ${code} could not be found`, 404)
+        }
+        const invoices = await db.query(`SELECT id, amt, paid, add_date, paid_date FROM invoices WHERE comp_code=$1`, [code])
+        company.rows[0].invoices = invoices.rows
+        return res.json({company: company.rows})
     }catch(err){
         return next(err)
     }
@@ -69,5 +70,7 @@ router.delete('/:code', async (req,res,next) =>{
     }
     
 })
+
+
 
 module.exports = router;
